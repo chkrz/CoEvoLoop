@@ -34,7 +34,7 @@ class AnnotationStatsService:
             import sys
             import os
             sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-            from mydemo.dataset_views import dataset_storage
+            from coevoloop.dataset_views import dataset_storage
             
             dataset = dataset_storage.get_dataset(dataset_id)
             if dataset:
