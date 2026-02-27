@@ -175,7 +175,6 @@ tmp/*
 backend/tmp/contexts/*
 backend/tmp/log/*
 viewer/node_modules/*
+backend/storage/*
 
 staticfiles/*
-
-*.json

@@ -1,0 +1,13 @@
+{
+  "models": {
+    "qwen3-235b-a22b": {
+      "provider": "DASHSCOPE"
+    },
+    "gpt-4o": {
+      "provider": "openai"
+    },
+    "gemini-2.5-pro": {
+      "provider": "google"
+    }
+  }
+}
