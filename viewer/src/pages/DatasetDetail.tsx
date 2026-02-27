@@ -13,7 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ArrowLeft, Download, RefreshCw, Database, Edit } from "lucide-react";
+import { ArrowLeft, Download, RefreshCw, Database, Edit, GitCompare } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import ScoreCard from "@/components/ScoreCard";
 
@@ -64,6 +64,8 @@ const { data: previewData, isLoading: isLoadingPreview } = useQuery({
     queryKey: ["dataset-relations", id],
     queryFn: () => getDatasetRelations(id!),
     enabled: !!id,
+    retry: false,
+    staleTime: 5 * 60 * 1000, // 5分钟缓存
   });
 
   const handleDownload = () => {
@@ -83,6 +85,15 @@ const { data: previewData, isLoading: isLoadingPreview } = useQuery({
       minute: "2-digit",
     });
   };
+
+  // 判断是否为标注来源的数据集
+  const isAnnotationSource = relationsData?.source_datasets?.some(
+    source => source.name.includes('标注') || 
+              source.name.includes('annotation') ||
+              relationsData?.annotation_batches?.length > 0
+  ) || dataset?.source === 'ANNOTATION_V2' || 
+     dataset?.source === 'ANNOTATION' ||
+     dataset?.file_path?.includes('annotated_datasets');
 
   if (isLoading) {
     return (
@@ -128,26 +139,21 @@ const { data: previewData, isLoading: isLoadingPreview } = useQuery({
               </h1>
               <p className="text-muted-foreground mt-1">数据集 ID: {dataset.id}</p>
             </div>
-            <div className="flex space-x-2">
-              <Button
-                onClick={() => navigate(`/datasets/${dataset.id}/convert`)}
+          <div className="flex space-x-2">
+            {isAnnotationSource && (
+              <Button 
+                onClick={() => navigate(`/annotation/compare/${id}`)}
                 variant="outline"
               >
-                <RefreshCw className="w-4 h-4 mr-2" />
-                转换为数据集
+                <GitCompare className="w-4 h-4 mr-2" />
+                与原数据对比
               </Button>
-              <Button
-                onClick={() => navigate(`/annotation/v2/${dataset.id}`)}
-                variant="outline"
-              >
-                <Edit className="w-4 h-4 mr-2" />
-                开始标注
-              </Button>
-              <Button onClick={handleDownload}>
-                <Download className="w-4 h-4 mr-2" />
-                下载数据集
-              </Button>
-            </div>
+            )}
+            <Button onClick={handleDownload}>
+              <Download className="w-4 h-4 mr-2" />
+              下载数据集
+            </Button>
+          </div>
           </div>
         </div>
 
@@ -192,7 +198,7 @@ const { data: previewData, isLoading: isLoadingPreview } = useQuery({
             <CardContent className="space-y-4">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">总条目数：</span>
-                <span className="text-2xl font-bold">{(dataset.item_count ?? 0).toLocaleString()}</span>
+                <span className="text-2xl font-bold">{dataset.item_count.toLocaleString()}</span>
               </div>
               {dataset.size_bytes && (
                 <div className="flex justify-between">
@@ -271,6 +277,64 @@ const { data: previewData, isLoading: isLoadingPreview } = useQuery({
                   </p>
                 )}
               </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* 标注批次信息 */}
+        {(relationsData?.annotation_batches?.length > 0 || dataset?.source === 'ANNOTATION_V2' || dataset?.source === 'ANNOTATION') && (
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle>标注信息</CardTitle>
+              <CardDescription>标注数据集详情</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {relationsData?.annotation_batches?.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {relationsData.annotation_batches.map((batch: any) => (
+                    <Card key={batch.id} className="hover:shadow-md transition-shadow">
+                      <CardContent className="p-4">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <h4 className="font-medium text-sm">{batch.name}</h4>
+                            <p className="text-xs text-muted-foreground">
+                              标注数据 • {batch.item_count}条
+                            </p>
+                          </div>
+                          <Badge variant="outline" className="text-xs">
+                            标注
+                          </Badge>
+                        </div>
+                        <div className="mt-3">
+                          <Button 
+                            size="sm" 
+                            variant="ghost"
+                            onClick={() => navigate(`/annotation/compare/${id}`)}
+                          >
+                            查看对比
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
+                  <div>
+                    <h4 className="font-medium text-sm">标注数据集</h4>
+                    <p className="text-xs text-muted-foreground">
+                      该数据集来源于标注任务
+                    </p>
+                  </div>
+                  <Button 
+                    size="sm" 
+                    variant="ghost"
+                    onClick={() => navigate(`/annotation/compare/${id}`)}
+                  >
+                    查看对比
+                  </Button>
+                </div>
+              )}
             </CardContent>
           </Card>
         )}

@@ -18,7 +18,7 @@ from django.urls import include, path, re_path
 from django.views.static import serve
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from coevoloop import dataset_views, synthesis_views, rl_playground_views, conversation_views
+from coevoloop import dataset_views, synthesis_views, rl_playground_views, conversation_views, dataset_comparison_views
 
 
 @api_view(['GET'])
@@ -48,6 +48,8 @@ urlpatterns = [
     path('api/datasets/<str:dataset_id>/preview/', dataset_views.dataset_preview, name='dataset-preview'),
     path('api/datasets/<str:dataset_id>/download/', dataset_views.dataset_download, name='dataset-download'),
     path('api/datasets/<str:dataset_id>/delete/', dataset_views.dataset_delete, name='dataset-delete'),
+    path('api/datasets/<str:dataset_id>/annotation_comparison/', dataset_comparison_views.annotation_comparison, name='dataset-annotation-comparison'),
+    path('api/datasets/<str:dataset_id>/relations/', dataset_comparison_views.dataset_relations, name='dataset-relations'),
 
     # 数据合成任务 API
     # 注意：固定路径必须在动态路径之前
