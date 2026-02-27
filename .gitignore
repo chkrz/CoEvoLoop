@@ -170,7 +170,6 @@ tags
 *.txt
 *xlsx
 *.db
-*.md
 
 tmp/*
 backend/tmp/contexts/*
