@@ -1,0 +1,148 @@
+/* 折叠/展开动画 */
+@keyframes slide-in-from-top {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-out-to-top {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+.animate-in {
+  animation: slide-in-from-top 0.2s ease-out;
+}
+
+.animate-out {
+  animation: slide-out-to-top 0.2s ease-in;
+}
+
+/* 悬停效果 */
+.hover-scale {
+  transition: transform 0.2s ease;
+}
+
+.hover-scale:hover {
+  transform: scale(1.02);
+}
+
+/* 消息气泡悬停效果 */
+.message-bubble-hover {
+  transition: all 0.2s ease;
+}
+
+.message-bubble-hover:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Context面板样式 */
+.context-panel {
+  transition: all 0.2s ease;
+}
+
+.context-panel-enter {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+}
+
+.context-panel-enter-active {
+  opacity: 1;
+  max-height: 500px;
+  transition: opacity 0.2s ease, max-height 0.2s ease;
+}
+
+.context-panel-exit {
+  opacity: 1;
+  max-height: 500px;
+}
+
+.context-panel-exit-active {
+  opacity: 0;
+  max-height: 0;
+  transition: opacity 0.2s ease, max-height 0.2s ease;
+}
+
+/* 按钮点击效果 */
+.button-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.button-ripple::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s;
+}
+
+.button-ripple:active::after {
+  width: 100px;
+  height: 100px;
+}
+
+/* 移动端响应式样式 */
+@media (max-width: 768px) {
+  .context-inline-panel {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+  }
+  
+  .context-message {
+    font-size: 0.875rem;
+  }
+  
+  .message-bubble {
+    max-width: 95%;
+  }
+}
+
+/* 深色模式支持 */
+@media (prefers-color-scheme: dark) {
+  .context-panel {
+    background-color: rgba(55, 65, 81, 0.5);
+    border-color: rgba(75, 85, 99, 0.5);
+  }
+  
+  .context-message {
+    color: rgba(229, 231, 235, 0.9);
+  }
+}
+
+/* 键盘导航高亮 */
+.keyboard-focus:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* 加载动画 */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}

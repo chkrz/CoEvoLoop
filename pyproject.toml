@@ -1,0 +1,38 @@
+[tool.poetry]
+name = "CoEvoLoop"
+version = "0.0.1"
+description = "2026 ACL System Demo"
+authors = ["Hui Cai <biyu.ch@ant-intl.com>"]
+readme = "README.md"
+packages = [
+    {include = ""},
+]
+
+[tool.poetry.dependencies]
+python = ">=3.10, <3.14"
+gunicorn = "^21.2.0"
+django = "4.1.12"
+django-health-check = "^3.17.0"
+pymysql = "^1.1.0"
+requests = "^2.31.0"
+opentracing = "^2.4.0"
+djangorestframework = "^3.14.0"
+django-cors-headers = "^3.13.0"
+tensorboard = "^2.20.0"
+dotenv = "^0.9.9"
+openai = "^2.18.0"
+litellm = "^1.0.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+[[tool.poetry.source]]
+name = "aliyun"
+url = "https://mirrors.aliyun.com/pypi/simple/"
+
+[[tool.poetry.source]]
+name = "tsinghua"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"

@@ -1,0 +1,1 @@
+{"messages": [{"role": "assistant", "content": "您好，欢迎使用WorldFirst，很高兴为您服务，请您描述一下想咨询的问题~"}, {"role": "user", "content": "万里汇的清算代码是什么？"}, {"role": "assistant", "content": "SWIFT代码是用于识别特定银行的标准化代码，由全球银行间金融电信协会SWIFT管理"}, {"role": "user", "content": "万里汇的账号之间可以互相转账吗？"}]}

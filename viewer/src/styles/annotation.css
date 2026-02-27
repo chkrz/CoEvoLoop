@@ -1,0 +1,346 @@
+/* 用户画像标注差异展示样式 */
+
+/* 差异高亮样式 */
+.diff-highlight {
+  /* 新增内容样式 */
+  .diff-added {
+    background-color: rgba(34, 197, 94, 0.1);
+    color: rgb(22, 101, 52);
+    border-left: 3px solid rgb(34, 197, 94);
+    padding: 2px 4px;
+    border-radius: 2px;
+  }
+
+  /* 删除内容样式 */
+  .diff-removed {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: rgb(185, 28, 28);
+    text-decoration: line-through;
+    border-left: 3px solid rgb(239, 68, 68);
+    padding: 2px 4px;
+    border-radius: 2px;
+  }
+
+  /* 修改内容样式 */
+  .diff-modified {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: rgb(180, 83, 9);
+    border-left: 3px solid rgb(245, 158, 11);
+    padding: 2px 4px;
+    border-radius: 2px;
+  }
+
+  /* 未变化内容样式 */
+  .diff-unchanged {
+    color: rgb(75, 85, 99);
+  }
+}
+
+/* 差异展示容器 */
+.diff-container {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.diff-summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+
+.diff-stats {
+  display: flex;
+  gap: 16px;
+  font-size: 12px;
+}
+
+.diff-stat {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.diff-stat.added {
+  color: #16a34a;
+}
+
+.diff-stat.removed {
+  color: #dc2626;
+}
+
+.diff-stat.modified {
+  color: #d97706;
+}
+
+/* 行内差异样式 */
+.diff-inline {
+  .diff-inline-added {
+    background-color: rgba(34, 197, 94, 0.2);
+    color: rgb(22, 101, 52);
+    padding: 1px 2px;
+    border-radius: 2px;
+  }
+
+  .diff-inline-removed {
+    background-color: rgba(239, 68, 68, 0.2);
+    color: rgb(185, 28, 28);
+    text-decoration: line-through;
+    padding: 1px 2px;
+    border-radius: 2px;
+  }
+}
+
+/* 数组差异样式 */
+.diff-array {
+  .diff-array-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 4px 0;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .diff-array-index {
+    font-weight: 600;
+    color: #64748b;
+    font-size: 12px;
+    min-width: 30px;
+  }
+
+  .diff-array-content {
+    flex: 1;
+  }
+
+  .diff-array-added {
+    background-color: rgba(34, 197, 94, 0.1);
+    border-left: 3px solid rgb(34, 197, 94);
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+
+  .diff-array-removed {
+    background-color: rgba(239, 68, 68, 0.1);
+    border-left: 3px solid rgb(239, 68, 68);
+    padding: 4px 8px;
+    border-radius: 4px;
+    text-decoration: line-through;
+  }
+
+  .diff-array-modified {
+    background-color: rgba(245, 158, 11, 0.1);
+    border-left: 3px solid rgb(245, 158, 11);
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+}
+
+/* 字段差异样式 */
+.diff-field {
+  margin-bottom: 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.diff-field-header {
+  background: #f8fafc;
+  padding: 12px 16px;
+  border-bottom: 1px solid #e2e8f0;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.diff-field-content {
+  padding: 16px;
+}
+
+.diff-field-changes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.diff-original,
+.diff-modified {
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.diff-original {
+  background-color: rgba(239, 68, 68, 0.05);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.diff-modified {
+  background-color: rgba(34, 197, 94, 0.05);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+/* 动画效果 */
+@keyframes diff-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.diff-animate-in {
+  animation: diff-fade-in 0.2s ease-out;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .diff-field-changes {
+    grid-template-columns: 1fr;
+  }
+  
+  .diff-container {
+    font-size: 13px;
+  }
+  
+  .diff-stats {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+/* 暗色主题支持 */
+@media (prefers-color-scheme: dark) {
+  .diff-highlight {
+    .diff-added {
+      background-color: rgba(34, 197, 94, 0.2);
+      color: rgb(134, 239, 172);
+    }
+
+    .diff-removed {
+      background-color: rgba(239, 68, 68, 0.2);
+      color: rgb(252, 165, 165);
+    }
+
+    .diff-modified {
+      background-color: rgba(245, 158, 11, 0.2);
+      color: rgb(253, 224, 71);
+    }
+  }
+
+  .diff-summary {
+    background: #1e293b;
+    border-color: #334155;
+  }
+
+  .diff-field {
+    border-color: #334155;
+  }
+
+  .diff-field-header {
+    background: #1e293b;
+    border-color: #334155;
+  }
+}
+
+/* 加载状态 */
+.diff-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  color: #64748b;
+}
+
+.diff-loading::after {
+  content: '';
+  width: 16px;
+  height: 16px;
+  border: 2px solid #e2e8f0;
+  border-top: 2px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-left: 8px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 工具提示 */
+.diff-tooltip {
+  position: relative;
+  cursor: help;
+}
+
+.diff-tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e293b;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  z-index: 1000;
+}
+
+.diff-tooltip:hover::after {
+  opacity: 1;
+}
+
+/* 折叠/展开动画 */
+.diff-collapse {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+
+.diff-collapse.expanded {
+  max-height: 500px;
+}
+
+/* 差异标记徽章 */
+.diff-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 6px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.diff-badge.added {
+  background-color: rgba(34, 197, 94, 0.1);
+  color: rgb(22, 101, 52);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.diff-badge.removed {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: rgb(185, 28, 28);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.diff-badge.modified {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: rgb(180, 83, 9);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
