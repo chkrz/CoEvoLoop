@@ -898,7 +898,7 @@ def get_annotated_datasets(request):
                 metadata = json.load(f)
 
             for dataset_id, copy_info in metadata.items():
-                if copy_info.get('status') == 'active':
+                if isinstance(copy_info, dict) and copy_info.get('status') == 'active':
                     # 获取基础数据集信息
                     dataset = dataset_storage.get_dataset(dataset_id)
 

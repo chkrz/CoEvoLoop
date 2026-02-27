@@ -116,6 +116,8 @@ export default function DatasetList() {
   const sourceLabels = {
     TASK: "任务生成",
     UPLOAD: "手动上传",
+    ANNOTATION: "标注导出",
+    ANNOTATION_V2: "标注导出",
   } as const;
 
   const handleUpload = () => {
@@ -214,6 +216,8 @@ export default function DatasetList() {
                   <SelectItem value="all">全部来源</SelectItem>
                   <SelectItem value="TASK">任务生成</SelectItem>
                   <SelectItem value="UPLOAD">手动上传</SelectItem>
+                  <SelectItem value="ANNOTATION">标注导出</SelectItem>
+                  <SelectItem value="ANNOTATION_V2">标注导出</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -251,18 +255,11 @@ export default function DatasetList() {
                           {dataset.name}
                         </div>
                       </TableCell>
-<TableCell>
-                        <div className="flex items-center space-x-2">
-                          <Badge variant="outline">{typeLabels[dataset.data_type]}</Badge>
-                          {dataset.source === "ANNOTATION" && (
-                            <Badge variant="secondary" className="text-xs">
-                              标注
-                            </Badge>
-                          )}
-                        </div>
+                      <TableCell>
+                        <Badge variant="outline">{typeLabels[dataset.data_type]}</Badge>
                       </TableCell>
                       <TableCell>
-                        <Badge variant={dataset.source === "TASK" ? "default" : "secondary"}>
+                        <Badge variant={["TASK", "ANNOTATION", "ANNOTATION_V2"].includes(dataset.source) ? "default" : "secondary"}>
                           {sourceLabels[dataset.source as keyof typeof sourceLabels]}
                         </Badge>
                       </TableCell>
@@ -271,7 +268,7 @@ export default function DatasetList() {
                           {dataset.file_format}
                         </span>
                       </TableCell>
-                      <TableCell>{(dataset.item_count ?? 0).toLocaleString()}</TableCell>
+                      <TableCell>{dataset.item_count.toLocaleString()}</TableCell>
                       <TableCell className="text-sm text-muted-foreground">
                         {formatDate(dataset.created_at)}
                       </TableCell>
