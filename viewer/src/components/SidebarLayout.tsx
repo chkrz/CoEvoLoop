@@ -1,5 +1,6 @@
 import { ReactNode, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { 
   Home, 
@@ -19,13 +20,13 @@ interface NavItem {
   children?: NavItem[];
 }
 
-const navItems: NavItem[] = [
-  { label: "Home", path: "/", icon: Home },
-  { label: "Dataset", path: "/datasets", icon: Database },
-  { label: "Synthesis & Evaluation", path: "/synthesis", icon: Sparkles },
-  { label: "Model Playground", path: "/dialogue_bs", icon: MessageSquare },
-  { label: "RL Inspection", path: "/rl-playground", icon: PlayCircle },
-  { label: "Annotation", path: "/annotation", icon: Tag }
+const getNavItems = (t: any): NavItem[] => [
+  { label: t('navigation.home'), path: "/", icon: Home },
+  { label: t('navigation.datasets'), path: "/datasets", icon: Database },
+  { label: t('navigation.synthesis'), path: "/synthesis", icon: Sparkles },
+  { label: t('navigation.model_playground'), path: "/dialogue_bs", icon: MessageSquare },
+  { label: t('navigation.rl_playground'), path: "/rl-playground", icon: PlayCircle },
+  { label: t('navigation.annotations'), path: "/annotation", icon: Tag }
 ];
 
 interface SidebarLayoutProps {
@@ -35,6 +36,7 @@ interface SidebarLayoutProps {
 export function SidebarLayout({ children }: SidebarLayoutProps) {
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useTranslation();
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
 
   const isActive = (path: string) => {
@@ -76,7 +78,7 @@ export function SidebarLayout({ children }: SidebarLayoutProps) {
 
         {/* Navigation */}
         <nav className="flex-1 overflow-y-auto py-4">
-          {navItems.map((item) => {
+          {getNavItems(t).map((item) => {
             const Icon = item.icon;
             const active = isActive(item.path);
             const expanded = expandedItems.includes(item.path);

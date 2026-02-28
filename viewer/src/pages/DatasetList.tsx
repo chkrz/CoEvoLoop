@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import {
   listDatasets,
   uploadDataset,
@@ -55,6 +56,7 @@ import { Database, Upload, Download, Trash2, Search, Eye, FileText } from "lucid
 export default function DatasetList() {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [typeFilter, setTypeFilter] = useState<string>("all");
   const [sourceFilter, setSourceFilter] = useState<string>("all");
@@ -80,14 +82,14 @@ export default function DatasetList() {
     mutationFn: uploadDataset,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["datasets"] });
-      toast({ title: "上传成功", description: "数据集已添加" });
+      toast({ title: t('dataset.upload_success'), description: t('dataset.added_success') });
       setUploadOpen(false);
       setUploadFile(null);
       setUploadName("");
       setUploadType("DIALOGUE");
     },
     onError: (error: Error) => {
-      toast({ title: "上传失败", description: error.message, variant: "destructive" });
+      toast({ title: t('dataset.upload_failed'), description: error.message, variant: "destructive" });
     },
   });
 
@@ -95,36 +97,36 @@ export default function DatasetList() {
     mutationFn: deleteDataset,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["datasets"] });
-      toast({ title: "删除成功", description: "数据集已删除" });
+      toast({ title: t('dataset.delete_success'), description: t('dataset.deleted_success') });
       setDeleteDialogOpen(false);
       setDatasetToDelete(null);
     },
     onError: (error: Error) => {
-      toast({ title: "删除失败", description: error.message, variant: "destructive" });
+      toast({ title: t('dataset.delete_failed'), description: error.message, variant: "destructive" });
     },
   });
 
   const datasets = useMemo(() => data?.datasets ?? [], [data]);
 
   const typeLabels: Record<DatasetType, string> = {
-    PORTRAIT: "用户画像",
-    DIALOGUE: "对话合成",
-    EVALUATION: "质量评估",
-    HUMAN_HUMAN_DIALOGUE: "人人对话",
+    PORTRAIT: t('dataset.types.portrait'),
+    DIALOGUE: t('dataset.types.dialogue'),
+    EVALUATION: t('dataset.types.evaluation'),
+    HUMAN_HUMAN_DIALOGUE: t('dataset.types.human_dialogue'),
   };
 
   const sourceLabels = {
-    TASK: "任务生成",
-    UPLOAD: "手动上传",
-    ANNOTATION: "标注导出",
-    ANNOTATION_V2: "标注导出",
+    TASK: t('dataset.sources.task'),
+    UPLOAD: t('dataset.sources.upload'),
+    ANNOTATION: t('dataset.sources.annotation'),
+    ANNOTATION_V2: t('dataset.sources.annotation'),
   } as const;
 
   const handleUpload = () => {
     if (!uploadFile || !uploadName.trim()) {
       toast({
-        title: "请填写完整信息",
-        description: "请选择文件并输入数据集名称",
+        title: t('common.error'),
+        description: t('dataset.fill_complete_info'),
         variant: "destructive",
       });
       return;
@@ -147,20 +149,14 @@ export default function DatasetList() {
     try {
       const url = getDatasetDownloadUrl(dataset.id);
       window.location.href = url;
-      toast({ title: "下载成功", description: "文件已开始下载" });
+      toast({ title: t('dataset.download_success'), description: t('dataset.download_started') });
     } catch (error: any) {
-      toast({ title: "下载失败", description: error.message, variant: "destructive" });
+      toast({ title: t('dataset.download_failed'), description: error.message, variant: "destructive" });
     }
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleString("zh-CN", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    return new Date(dateString).toLocaleString();
   };
 
   return (
@@ -171,13 +167,13 @@ export default function DatasetList() {
           <div>
             <h1 className="text-3xl font-bold flex items-center gap-2">
               <Database className="w-8 h-8" />
-              Dataset
+              {t('dataset.management')}
             </h1>
-            <p className="text-muted-foreground mt-1">自动汇总任务输出与手动上传数据。</p>
+            <p className="text-muted-foreground mt-1">{t('dataset.description')}</p>
           </div>
           <Button onClick={() => setUploadOpen(true)} size="lg">
             <Upload className="w-4 h-4 mr-2" />
-            上传数据集
+            {t('dataset.upload')}
           </Button>
         </div>
 
@@ -197,27 +193,27 @@ export default function DatasetList() {
 
               <Select value={typeFilter} onValueChange={setTypeFilter}>
                 <SelectTrigger className="w-full md:w-[180px]">
-                  <SelectValue placeholder="数据类型" />
+                <SelectValue placeholder={t('dataset.type')} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">全部类型</SelectItem>
-                  <SelectItem value="PORTRAIT">用户画像</SelectItem>
-                  <SelectItem value="DIALOGUE">对话合成</SelectItem>
-                  <SelectItem value="EVALUATION">质量评估</SelectItem>
-                  <SelectItem value="HUMAN_HUMAN_DIALOGUE">人人对话</SelectItem>
+                  <SelectItem value="all">{t('common.all')}</SelectItem>
+                  <SelectItem value="PORTRAIT">{t('dataset.types.portrait')}</SelectItem>
+                  <SelectItem value="DIALOGUE">{t('dataset.types.dialogue')}</SelectItem>
+                  <SelectItem value="EVALUATION">{t('dataset.types.evaluation')}</SelectItem>
+                  <SelectItem value="HUMAN_HUMAN_DIALOGUE">{t('dataset.types.human_dialogue')}</SelectItem>
                 </SelectContent>
               </Select>
 
               <Select value={sourceFilter} onValueChange={setSourceFilter}>
                 <SelectTrigger className="w-full md:w-[180px]">
-                  <SelectValue placeholder="数据来源" />
+                <SelectValue placeholder={t('dataset.source')} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">全部来源</SelectItem>
-                  <SelectItem value="TASK">任务生成</SelectItem>
-                  <SelectItem value="UPLOAD">手动上传</SelectItem>
-                  <SelectItem value="ANNOTATION">标注导出</SelectItem>
-                  <SelectItem value="ANNOTATION_V2">标注导出</SelectItem>
+                  <SelectItem value="all">{t('common.all')}</SelectItem>
+                  <SelectItem value="TASK">{t('dataset.sources.task')}</SelectItem>
+                  <SelectItem value="UPLOAD">{t('dataset.sources.upload')}</SelectItem>
+                  <SelectItem value="ANNOTATION">{t('dataset.sources.annotation')}</SelectItem>
+                  <SelectItem value="ANNOTATION_V2">{t('dataset.sources.annotation')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -228,20 +224,20 @@ export default function DatasetList() {
         <Card>
           <CardContent className="p-0">
             {isLoading ? (
-              <div className="p-8 text-center text-muted-foreground">加载中...</div>
+              <div className="p-8 text-center text-muted-foreground">{t('common.loading')}</div>
             ) : datasets.length === 0 ? (
-              <div className="p-8 text-center text-muted-foreground">暂无数据集</div>
+              <div className="p-8 text-center text-muted-foreground">{t('dataset.no_datasets')}</div>
             ) : (
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>名称</TableHead>
-                    <TableHead>类型</TableHead>
-                    <TableHead>来源</TableHead>
-                    <TableHead>格式</TableHead>
-                    <TableHead>条目数</TableHead>
-                    <TableHead>创建时间</TableHead>
-                    <TableHead className="text-right">操作</TableHead>
+                    <TableHead>{t('common.name')}</TableHead>
+                    <TableHead>{t('common.type')}</TableHead>
+                    <TableHead>{t('dataset.source')}</TableHead>
+                    <TableHead>{t('common.format')}</TableHead>
+                    <TableHead>{t('dataset.item_count')}</TableHead>
+                    <TableHead>{t('common.created')}</TableHead>
+                    <TableHead className="text-right">{t('common.actions')}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -310,35 +306,35 @@ export default function DatasetList() {
       <Dialog open={uploadOpen} onOpenChange={setUploadOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>上传数据集</DialogTitle>
-            <DialogDescription>上传json或jsonl格式的数据文件</DialogDescription>
+            <DialogTitle>{t('dataset.upload')}</DialogTitle>
+            <DialogDescription>{t('dataset.upload_description')}</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
-              <Label htmlFor="name">数据集名称</Label>
+              <Label htmlFor="name">{t('dataset.name')}</Label>
               <Input
                 id="name"
                 value={uploadName}
                 onChange={(e) => setUploadName(e.target.value)}
-                placeholder="输入数据集名称"
+                placeholder={t('dataset.name_placeholder')}
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="type">数据类型</Label>
+              <Label htmlFor="type">{t('common.type')}</Label>
               <Select value={uploadType} onValueChange={(v) => setUploadType(v as DatasetType)}>
                 <SelectTrigger id="type">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="PORTRAIT">用户画像</SelectItem>
-                  <SelectItem value="DIALOGUE">对话合成</SelectItem>
-                  <SelectItem value="EVALUATION">质量评估</SelectItem>
-                  <SelectItem value="HUMAN_HUMAN_DIALOGUE">人人对话</SelectItem>
+                  <SelectItem value="PORTRAIT">{t('dataset.types.portrait')}</SelectItem>
+                  <SelectItem value="DIALOGUE">{t('dataset.types.dialogue')}</SelectItem>
+                  <SelectItem value="EVALUATION">{t('dataset.types.evaluation')}</SelectItem>
+                  <SelectItem value="HUMAN_HUMAN_DIALOGUE">{t('dataset.types.human_dialogue')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="file">选择文件</Label>
+              <Label htmlFor="file">{t('common.file')}</Label>
               <Input
                 id="file"
                 type="file"
@@ -349,10 +345,10 @@ export default function DatasetList() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setUploadOpen(false)}>
-              取消
+              {t('common.cancel')}
             </Button>
             <Button onClick={handleUpload} disabled={uploadMutation.isPending}>
-              {uploadMutation.isPending ? "上传中..." : "上传"}
+              {uploadMutation.isPending ? t('common.uploading') : t('common.upload')}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -362,14 +358,14 @@ export default function DatasetList() {
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>确认删除</AlertDialogTitle>
+            <AlertDialogTitle>{t('common.confirm_delete')}</AlertDialogTitle>
             <AlertDialogDescription>
-              确定要删除数据集 "{datasetToDelete?.name}" 吗？此操作不可恢复。
+              {t('dataset.delete_confirm', { name: datasetToDelete?.name })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>取消</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmDelete}>删除</AlertDialogAction>
+            <AlertDialogCancel>{t('common.cancel')}</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete}>{t('common.delete')}</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { 
   MessageSquare, 
   Database, 
@@ -20,81 +21,102 @@ import { useUser } from "@/contexts/UserContext";
 export function Homepage() {
   const navigate = useNavigate();
   const { isLoggedIn } = useUser();
+  const { t } = useTranslation();
 
   const features = [
     {
       icon: Database,
-      title: "Dataset",
-      subtitle: "数据集管理",
-      description: "管理和组织合成、评测、标注数据集",
+      title: t('navigation.datasets'),
+      subtitle: t('dataset.management'),
+      description: t('homepage.dataset_description'),
       path: "/datasets",
       color: "text-blue-600",
       bgColor: "bg-blue-50",
       borderColor: "border-blue-200",
       hoverBorder: "hover:border-blue-400",
       requiresAuth: false,
-      features: ["数据上传", "版本管理", "质量监控"]
+      features: [
+        t('homepage.feature_upload'),
+        t('homepage.feature_version'),
+        t('homepage.feature_quality')
+      ]
     },
     {
       icon: Sparkles,
-      title: "Synthesis & Evaluation",
-      subtitle: "数据合成与评测",
-      description: "基于强模型自动生成高质量对话数据，并通过多维度评测确保数据质量",
+      title: t('homepage.synthesis_evaluation'),
+      subtitle: t('homepage.synthesis_subtitle'),
+      description: t('homepage.synthesis_description'),
       path: "/synthesis",
       color: "text-green-600",
       bgColor: "bg-green-50",
       borderColor: "border-green-200",
       hoverBorder: "hover:border-green-400",
       requiresAuth: false,
-      features: ["智能合成", "质量评测", "批量生成"]
+      features: [
+        t('homepage.feature_intelligent'),
+        t('homepage.feature_quality_eval'),
+        t('homepage.feature_batch')
+      ]
     },
     {
       icon: FileText,
-      title: "Annotation",
-      subtitle: "数据标注",
-      description: "人工标注和审核合成对话与打分器，确保数据的质量",
+      title: t('navigation.annotations'),
+      subtitle: t('homepage.annotation_subtitle'),
+      description: t('homepage.annotation_description'),
       path: "/annotation",
       color: "text-orange-600",
       bgColor: "bg-orange-50",
       borderColor: "border-orange-200",
       hoverBorder: "hover:border-orange-400",
       requiresAuth: false,
-      features: ["人工标注", "质量审核", "协作管理"]
+      features: [
+        t('homepage.feature_manual'),
+        t('homepage.feature_quality_review'),
+        t('homepage.feature_collaboration')
+      ]
     },
     {
       icon: MessageSquare,
-      title: "Model Playground",
-      subtitle: "模型试验场",
-      description: "多模型对比评测，实时查看不同模型的回复效果",
+      title: t('homepage.model_playground'),
+      subtitle: t('homepage.playground_subtitle'),
+      description: t('homepage.playground_description'),
       path: "/dialogue_bs",
       color: "text-purple-600",
       bgColor: "bg-purple-50",
       borderColor: "border-purple-200",
       hoverBorder: "hover:border-purple-400",
       requiresAuth: true,
-      features: ["多模型对比", "实时测试", "效果评估"]
+      features: [
+        t('homepage.feature_comparison'),
+        t('homepage.feature_realtime'),
+        t('homepage.feature_assessment')
+      ]
     },
     {
       icon: Zap,
-      title: "RL Inspection",
-      subtitle: "强化学习检查",
-      description: "强化学习日志查看，Reward曲线，rollout对比",
+      title: t('navigation.rl_playground'),
+      subtitle: t('homepage.rl_subtitle'),
+      description: t('homepage.rl_description'),
       path: "/rl-playground",
       color: "text-red-600",
       bgColor: "bg-red-50",
       borderColor: "border-red-200",
       hoverBorder: "hover:border-red-400",
       requiresAuth: false,
-      features: ["Reward", "Rollout", "实验追踪"]
+      features: [
+        t('homepage.feature_reward'),
+        t('homepage.feature_rollout'),
+        t('homepage.feature_tracking')
+      ]
     }
   ];
 
   const workflow = [
-    { step: 1, title: "数据合成", module: "Synthesis", color: "from-emerald-400 to-teal-500" },
-    { step: 2, title: "质量评估", module: "Evaluation", color: "from-sky-400 to-blue-500" },
-    { step: 3, title: "人工标注", module: "Annotation", color: "from-amber-400 to-orange-500" },
-    { step: 4, title: "模型训练", module: "RL Inspection", color: "from-rose-400 to-pink-500" },
-    { step: 5, title: "模型试用", module: "Model Playground", color: "from-violet-400 to-purple-500" },
+    { step: 1, title: t('homepage.workflow_synthesis'), module: "Synthesis", color: "from-emerald-400 to-teal-500" },
+    { step: 2, title: t('homepage.workflow_evaluation'), module: "Evaluation", color: "from-sky-400 to-blue-500" },
+    { step: 3, title: t('homepage.workflow_annotation'), module: "Annotation", color: "from-amber-400 to-orange-500" },
+    { step: 4, title: t('homepage.workflow_training'), module: "RL Inspection", color: "from-rose-400 to-pink-500" },
+    { step: 5, title: t('homepage.workflow_testing'), module: "Model Playground", color: "from-violet-400 to-purple-500" },
   ];
 
   return (
@@ -117,7 +139,7 @@ export function Homepage() {
               CoEvoLoop
             </h1>
             <p className="text-lg text-gray-500 max-w-3xl mx-auto">
-              从数据合成、标注到模型训练评测的完整闭环系统
+              {t('homepage.subtitle')}
             </p>
           </div>
 
@@ -126,9 +148,9 @@ export function Homepage() {
             <div className="text-center mb-8">
               <h2 className="text-2xl font-bold text-gray-800 mb-2 flex items-center justify-center gap-2">
                 <TrendingUp className="w-6 h-6 text-blue-500" />
-                Closed-Loop RL Training of Customer-Service Agents
+                {t('homepage.workflow_title')}
               </h2>
-              <p className="text-gray-600">从数据合成成到模型优化的全流程</p>
+              <p className="text-gray-600">{t('homepage.workflow_subtitle')}</p>
             </div>
             
             {/* Dataset as foundation */}
@@ -139,7 +161,7 @@ export function Homepage() {
                   <div className="flex items-center justify-center gap-3">
                     <Database className="w-8 h-8 text-blue-600" />
                     <div className="text-center">
-                      <h3 className="text-xl font-bold text-gray-800">Dataset - 数据集</h3>
+                      <h3 className="text-xl font-bold text-gray-800">{t('homepage.dataset_foundation')}</h3>
                     </div>
                     <Database className="w-8 h-8 text-blue-600" />
                   </div>
@@ -179,8 +201,8 @@ export function Homepage() {
       {/* Features Section */}
       <div className="max-w-7xl mx-auto px-6 pb-20">
         <div className="text-center mb-10">
-          <h2 className="text-3xl font-bold text-gray-800 mb-2">平台功能模块</h2>
-          <p className="text-gray-600">探索我们的核心功能，开始你的 AI 训练之旅</p>
+          <h2 className="text-3xl font-bold text-gray-800 mb-2">{t('homepage.features_title')}</h2>
+          <p className="text-gray-600">{t('homepage.features_subtitle')}</p>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -208,7 +230,7 @@ export function Homepage() {
                       <ArrowRight className={`w-6 h-6 text-gray-300 group-hover:${feature.color} group-hover:translate-x-1 transition-all duration-300`} />
                     ) : (
                       <Badge variant="outline" className="text-amber-600 border-amber-600">
-                        需要登录
+                        {t('homepage.login_required')}
                       </Badge>
                     )}
                   </div>
@@ -244,7 +266,7 @@ export function Homepage() {
                           navigate(feature.path);
                         }}
                       >
-                        立即使用
+                        {t('homepage.get_started')}
                         <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                       </Button>
                     )}
