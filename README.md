@@ -4,6 +4,12 @@ This repository contains the source code for our ACL 2026 System Demo paper. CoE
 
 > **Note:** This open-source version is a simplified implementation of our internal system. While it captures the core methodologies and workflows described in our paper, some enterprise-specific features and scalable infrastructure components have been omitted or streamlined for ease of deployment and demonstration purposes.
 
+## 🎬 Demo Video
+
+[![CoEvoLoop Demo](https://img.youtube.com/vi/1rdYXjRDgoQ/0.jpg)](https://youtu.be/1rdYXjRDgoQ)
+
+Watch the full demo: https://youtu.be/1rdYXjRDgoQ
+
 ## 📄 License
 
 This project is licensed under the [MIT License](LICENSE).
